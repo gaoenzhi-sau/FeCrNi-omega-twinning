@@ -1,0 +1,36 @@
+cutoff 3.8 frame 0 candidate n 0
+cutoff 3.8 frame 0 bcc n 1200 p10 0.14267 p50 0.15250 p90 0.16641
+cutoff 3.8 frame 0 nonbcc_noncandidate n 0
+cutoff 3.8 frame 125 candidate n 1200 p10 0.14932 p50 0.16163 p90 0.22940
+cutoff 3.8 frame 125 bcc n 1200 p10 0.14631 p50 0.15863 p90 0.17308
+cutoff 3.8 frame 125 nonbcc_noncandidate n 1200 p10 0.14591 p50 0.15801 p90 0.17669
+cutoff 3.8 frame 150 candidate n 1200 p10 0.18105 p50 0.25511 p90 0.29752
+cutoff 3.8 frame 150 bcc n 1200 p10 0.17449 p50 0.19959 p90 0.27112
+cutoff 3.8 frame 150 nonbcc_noncandidate n 1200 p10 0.16582 p50 0.24823 p90 0.27391
+cutoff 3.8 frame 300 candidate n 1200 p10 0.19665 p50 0.27223 p90 0.33924
+cutoff 3.8 frame 300 bcc n 1200 p10 0.24763 p50 0.28546 p90 0.31183
+cutoff 3.8 frame 300 nonbcc_noncandidate n 1200 p10 0.20169 p50 0.26827 p90 0.32877
+cutoff 5.0 frame 0 candidate n 0
+cutoff 5.0 frame 0 bcc n 1200 p10 0.21566 p50 0.23715 p90 0.25984
+cutoff 5.0 frame 0 nonbcc_noncandidate n 0
+cutoff 5.0 frame 125 candidate n 1200 p10 0.17176 p50 0.19735 p90 0.21515
+cutoff 5.0 frame 125 bcc n 1200 p10 0.17217 p50 0.19654 p90 0.21403
+cutoff 5.0 frame 125 nonbcc_noncandidate n 1200 p10 0.17236 p50 0.19855 p90 0.21675
+cutoff 5.0 frame 150 candidate n 1200 p10 0.21879 p50 0.24339 p90 0.27584
+cutoff 5.0 frame 150 bcc n 1200 p10 0.22029 p50 0.24908 p90 0.27977
+cutoff 5.0 frame 150 nonbcc_noncandidate n 1200 p10 0.21817 p50 0.24277 p90 0.26580
+cutoff 5.0 frame 300 candidate n 1200 p10 0.23383 p50 0.26020 p90 0.30109
+cutoff 5.0 frame 300 bcc n 1200 p10 0.24406 p50 0.27034 p90 0.29409
+cutoff 5.0 frame 300 nonbcc_noncandidate n 1200 p10 0.23260 p50 0.25993 p90 0.29251
+cutoff 6.0 frame 0 candidate n 0
+cutoff 6.0 frame 0 bcc n 1200 p10 0.21566 p50 0.23715 p90 0.25984
+cutoff 6.0 frame 0 nonbcc_noncandidate n 0
+cutoff 6.0 frame 125 candidate n 1200 p10 0.17176 p50 0.19735 p90 0.21515
+cutoff 6.0 frame 125 bcc n 1200 p10 0.17217 p50 0.19654 p90 0.21403
+cutoff 6.0 frame 125 nonbcc_noncandidate n 1200 p10 0.17236 p50 0.19855 p90 0.21675
+cutoff 6.0 frame 150 candidate n 1200 p10 0.21879 p50 0.24339 p90 0.27584
+cutoff 6.0 frame 150 bcc n 1200 p10 0.22029 p50 0.24908 p90 0.27977
+cutoff 6.0 frame 150 nonbcc_noncandidate n 1200 p10 0.21817 p50 0.24277 p90 0.26580
+cutoff 6.0 frame 300 candidate n 1200 p10 0.23383 p50 0.26020 p90 0.30109
+cutoff 6.0 frame 300 bcc n 1200 p10 0.24406 p50 0.27034 p90 0.29409
+cutoff 6.0 frame 300 nonbcc_noncandidate n 1200 p10 0.23260 p50 0.25993 p90 0.29251

@@ -1,0 +1,54 @@
+# Cr45 independent random-configuration tensile run
+# Atom types: 1 = Fe, 2 = Cr, 3 = Ni
+units           metal
+boundary        p p p
+atom_style      atomic
+timestep        0.001
+neighbor        0.3 bin
+read_data      ../../common/Fe_SFE.lmp
+
+# Cr45: replace about 45% of all Fe sites by Cr, then 0.272727 of
+# the remaining Fe sites by Ni (about 15% of all sites).
+set             type 1 type/fraction 2 0.45 19231
+set             type 1 type/fraction 3 0.272727 67459
+
+pair_style      hybrid/overlay eam/alloy eam/fs
+pair_coeff      * * eam/alloy ../../../potentials/FeCrNi_d.eam.alloy Fe Cr Ni
+pair_coeff      * * eam/fs ../../../potentials/FeCrNi_s.eam.fs Fe Cr Ni
+
+compute         csym all centro/atom bcc
+compute         peratom all pe/atom
+
+min_style       cg
+minimize        1e-8 1e-8 10000 10000
+velocity        all create 300 531077
+fix             2 all npt temp 300 300 0.01 x 0 0 0.1 y 0 0 0.1
+thermo          100
+thermo_style    custom step temp lx ly lz vol pxx pyy pzz pe temp
+thermo_modify   lost ignore
+run             20000
+
+# Record the equilibrated Z length used for engineering strain.
+variable        tmp equal "lz"
+variable        L0 equal ${tmp}
+print           "Initial Length, L0: ${L0}"
+
+reset_timestep  0
+unfix           2
+fix             2 all npt temp 300 300 0.01 x 0 0 0.1 y 0 0 0.1
+fix             3 all deform 1 z erate 0.001 units box remap x
+
+variable        strain equal "(lz - v_L0)/v_L0"
+variable        p1 equal "v_strain"
+variable        p2 equal "-pxx/10000"
+variable        p3 equal "-pyy/10000"
+variable        p4 equal "-pzz/10000"
+
+fix             def1 all print 100 "${p1} ${p2} ${p3} ${p4}" file FeNiGr_tens_100.def1.txt screen no
+dump            trace all custom 1000 md.lammpstrj id type x y z
+thermo          1000
+thermo_style    custom step v_strain temp v_p2 v_p3 v_p4 ke pe press
+
+# 300000 steps x 0.001 ps = 300 ps; target engineering strain is about 0.30.
+run             300000  # 300000 steps x 0.001 ps = 300 ps; target engineering strain is about 0.30.
+print           "All done"

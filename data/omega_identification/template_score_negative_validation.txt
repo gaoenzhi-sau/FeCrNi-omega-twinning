@@ -1,0 +1,15 @@
+frame 0 candidate n 0
+frame 0 bcc n 5000 dist_p50 0.07204 vec_p10 0.14279 vec_p50 0.15324 vec_p90 0.16623
+frame 0 nonbcc_noncandidate n 0
+frame 100 candidate n 5000 dist_p50 0.05520 vec_p10 0.14955 vec_p50 0.16161 vec_p90 0.17790
+frame 100 bcc n 5000 dist_p50 0.04541 vec_p10 0.14477 vec_p50 0.15610 vec_p90 0.17074
+frame 100 nonbcc_noncandidate n 5000 dist_p50 0.05280 vec_p10 0.14591 vec_p50 0.15740 vec_p90 0.17097
+frame 125 candidate n 5000 dist_p50 0.05476 vec_p10 0.14847 vec_p50 0.16183 vec_p90 0.18395
+frame 125 bcc n 5000 dist_p50 0.04197 vec_p10 0.14709 vec_p50 0.15841 vec_p90 0.17279
+frame 125 nonbcc_noncandidate n 5000 dist_p50 0.05264 vec_p10 0.14591 vec_p50 0.15765 vec_p90 0.17417
+frame 150 candidate n 5000 dist_p50 0.04454 vec_p10 0.16360 vec_p50 0.20255 vec_p90 0.28792
+frame 150 bcc n 5000 dist_p50 0.03346 vec_p10 0.17192 vec_p50 0.19301 vec_p90 0.24063
+frame 150 nonbcc_noncandidate n 5000 dist_p50 0.04149 vec_p10 0.15566 vec_p50 0.18937 vec_p90 0.25395
+frame 300 candidate n 2963 dist_p50 0.04697 vec_p10 0.18997 vec_p50 0.24299 vec_p90 0.33014
+frame 300 bcc n 5000 dist_p50 0.05437 vec_p10 0.24744 vec_p50 0.28437 vec_p90 0.30128
+frame 300 nonbcc_noncandidate n 5000 dist_p50 0.04723 vec_p10 0.19318 vec_p50 0.24301 vec_p90 0.31872

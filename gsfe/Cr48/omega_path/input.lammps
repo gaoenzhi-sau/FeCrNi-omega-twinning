@@ -1,0 +1,80 @@
+label SFE
+# ---------- Displacement list ----------
+variable x_displace index 0 0.05 0.1 0.15 0.2 0.25 0.3 0.35 0.4 0.45 0.5 0.55 0.6 0.65 0.7 0.75 0.8 0.81 0.8285 0.85 0.9 0.95 1.0 1.05 1.1 1.15 1.2 1.25 1.3 1.35 1.4 1.45 1.5 1.55 1.6 1.65 1.6569 1.7 1.75 1.8 1.85 1.9 1.95 2.0 2.05 2.1 2.15 2.2 2.25 2.3 2.35 2.4 2.485 2.5 
+# ---------- Basic settings ---------- 
+units metal
+dimension 3
+boundary p p s
+atom_style atomic
+read_data ../../common/Fe_SFE.lmp
+set type 1 type/fraction 2 0.48 8793
+set type 1 type/fraction 3 0.288462 5633
+# ---------- Lattice and geometry ----------
+variable latparam1 equal 2.87
+variable xdim equal 77.05028017
+variable ydim equal 105.52861602
+variable b_vec equal ${latparam1}*sqrt(3)/12
+variable 2b_vec equal 5*${latparam1}*sqrt(3)/12
+variable 3b_vec equal ${latparam1}*sqrt(3)/2
+# ---------- Region definitions ----------
+region 1 block -.001 ${xdim} -.001 ${ydim} 1.171672593631 35.780177808939 units box
+region 2 block -.001 ${xdim} -.001 ${ydim} 35.780177808939 36.95185040257 units box
+region 3 block -.001 ${xdim} -.001 ${ydim} 36.95185040257 38.123522996201 units box
+region 4 block -.001 ${xdim} -.001 ${ydim} 38.123522996201 125.381621584011 units box
+
+region whole block 0 ${xdim} 0 ${ydim} -0.012654064011  125.381621584011  units box
+# ---------- Interatomic potential ----------
+pair_style hybrid/overlay eam/alloy eam/fs
+pair_coeff * * eam/alloy ../../../potentials/FeCrNi_d.eam.alloy Fe Cr Ni
+pair_coeff * * eam/fs ../../../potentials/FeCrNi_s.eam.fs Fe Cr Ni
+# ---------- Atom groups ----------
+group bot  region 1
+group top1 region 2
+group top2 region 3
+group top3 region 4
+group upper0 union top1 top2 top3   # fixed parent group
+# ---------- Initial energy ----------
+compute peratom all pe/atom
+compute eatoms all reduce sum c_peratom
+min_style cg
+minimize 1e-10 1e-10 5000 5000
+thermo 10
+thermo_style custom step pe c_eatoms
+dump 1 all custom 1 dump.comp.${x_displace}.lammpstrj id type xs ys zs c_peratom fx fy fz
+run 0
+variable E equal "c_eatoms" 
+variable Eo equal $E
+# ---------- Apply displacement ----------
+# 1. For x_displace <= b_vec, displace the entire upper0 group.
+if "${x_displace} <= ${b_vec}" then &
+   "displace_atoms upper0 move -${x_displace} 0.0 0.0 units box"
+
+# 2. For b_vec < x_displace <= 2b_vec:
+if "${x_displace} > ${b_vec} && ${x_displace} <= ${2b_vec}" then &
+   "displace_atoms top1 move -${b_vec} 0.0 0.0 units box" &
+   "displace_atoms top2 move -${x_displace} 0.0 0.0 units box" &
+   "displace_atoms top3 move -${x_displace} 0.0 0.0 units box" 
+
+# 3. For x_displace > 2b_vec:
+if "${x_displace} > ${2b_vec}" then &
+  "displace_atoms top1 move -${b_vec} 0.0 0.0 units box" &
+  "displace_atoms top2 move -${2b_vec} 0.0 0.0 units box" &
+  "displace_atoms top3 move -${x_displace} 0.0 0.0 units box" 
+fix 1 all setforce 0 0 NULL
+min_style cg
+minimize 1e-15 1e-15 10000 10000
+thermo 50
+thermo_style custom step pe c_eatoms
+# ---------- GSFE calculation ----------
+variable Ef  equal c_eatoms
+variable A  equal (${xdim}*${ydim})*1e-20
+variable Cf equal 1.60217657e-16
+variable SFE equal ((${Ef}-${Eo})*${Cf}/${A})
+variable norm_displace equal ${x_displace}/${b_vec}
+print "${norm_displace} ${SFE}" append SFEFe.dat screen no
+print "Normalized displacement: ${norm_displace} (in units of b)"
+print "The Stacking-fault energy = ${SFE} mJ/m^2"
+ # ---------- Clear and continue to the next displacement ----------
+clear
+next x_displace
+jump input.lammps SFE

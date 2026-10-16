@@ -1,0 +1,15 @@
+frame 0 BCC_111 n_sample 5000 p10 0.9998 p50 0.9999 p90 1.0000 max 1.0000
+frame 0 FCC_111 no_atoms
+frame 0 HCP_0001 no_atoms
+frame 100 BCC_111 n_sample 5000 p10 0.9982 p50 0.9989 p90 0.9995 max 1.0000
+frame 100 FCC_111 n_sample 5000 p10 0.8189 p50 0.8257 p90 0.8341 max 0.8513
+frame 100 HCP_0001 n_sample 15 p10 0.8354 p50 0.8382 p90 0.8448 max 0.8490
+frame 125 BCC_111 n_sample 5000 p10 0.9973 p50 0.9982 p90 0.9992 max 1.0000
+frame 125 FCC_111 n_sample 5000 p10 0.8208 p50 0.8282 p90 0.8378 max 0.8618
+frame 125 HCP_0001 n_sample 27 p10 0.8395 p50 0.8455 p90 0.8544 max 0.8567
+frame 150 BCC_111 n_sample 5000 p10 0.9978 p50 0.9992 p90 0.9998 max 1.0000
+frame 150 FCC_111 n_sample 5000 p10 0.8338 p50 0.8548 p90 0.8844 max 0.9460
+frame 150 HCP_0001 n_sample 1985 p10 0.8261 p50 0.8426 p90 0.8676 max 0.9063
+frame 300 BCC_111 n_sample 5000 p10 0.9955 p50 0.9982 p90 0.9995 max 1.0000
+frame 300 FCC_111 n_sample 5000 p10 0.8489 p50 0.8687 p90 0.8896 max 0.9605
+frame 300 HCP_0001 n_sample 5000 p10 0.7924 p50 0.8171 p90 0.8940 max 0.9421

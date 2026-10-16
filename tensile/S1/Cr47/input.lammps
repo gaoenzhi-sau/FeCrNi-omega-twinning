@@ -1,0 +1,55 @@
+# ----------------------- Model settings
+units	        metal			# metal units: A, ps, eV, K, bar
+boundary	p p p			# periodic boundaries in all directions
+atom_style	atomic			# atomic particles
+timestep		0.001			# timestep = 1 fs
+neighbor		0.3 bin			# neighbor skin distance = 0.3 A
+read_data      ../../common/Fe_SFE.lmp			# read the starting structure
+# ------------------- Random substitution to construct the alloy
+set type 1 type/fraction 2 0.47 8793
+set type 1 type/fraction 3 0.283019 5633
+# ---------- Interatomic potential ----------
+pair_style hybrid/overlay eam/alloy eam/fs
+pair_coeff * * eam/alloy ../../../potentials/FeCrNi_d.eam.alloy Fe Cr Ni
+pair_coeff * * eam/fs ../../../potentials/FeCrNi_s.eam.fs Fe Cr Ni
+# -------------- Per-atom quantities
+compute csym all centro/atom bcc  # per-atom centrosymmetry parameter for BCC defect identification
+compute peratom all pe/atom       # per-atom potential energy
+# -------------- Equilibration
+min_style	       cg
+minimize		       1e-8 1e-8 10000 10000
+velocity		        all create 300 8877423
+fix			        2 all npt temp 300 300 0.01 x 0 0 0.1 y 0 0 0.1
+thermo		        100
+thermo_style		custom step temp lx ly lz vol pxx pyy pzz pe temp
+thermo_modify	lost ignore
+run				20000
+# -------------------- Record the equilibrated z box length
+variable tmp equal "lz"  # current z box length
+variable L0 equal ${tmp}  # reference length before tensile loading
+print "Initial Length, L0: ${L0}"  # print the reference length
+# ------------- Uniaxial tensile deformation
+reset_timestep 0  # reset timestep at the start of tensile loading
+unfix			2
+fix				2 all npt temp 300 300 0.01 x 0 0 0.1 y 0 0 0.1
+fix 3 all deform 1 z erate 0.001 units box remap x
+# --------------------- Strain and stress variables
+variable strain equal "(lz - v_L0)/v_L0"  # engineering strain = (current z length - reference length) / reference length
+variable p1 equal "v_strain"              # engineering strain
+variable p2 equal "-pxx/10000"            # x stress in GPa
+variable p3 equal "-pyy/10000"            # y stress in GPa
+variable p4 equal "-pzz/10000"            # z stress in GPa
+# ---------------- Output stress-strain data
+# - Output strain and x/y/z stresses every 100 steps
+# - Save to FeNiGr_tens_100.def1.txt without screen output
+fix def1 all print 100 "${p1} ${p2} ${p3} ${p4}" file FeNiGr_tens_100.def1.txt screen no
+# ---------------- Output atomic trajectory for visualization
+# - Write md.lammpstrj every 1000 steps
+# - Columns: atom ID, type, and x/y/z coordinates
+dump trace all custom 1000 md.lammpstrj id type x y z
+# Thermodynamic output
+thermo 1000  # output every 1000 steps
+thermo_style custom step v_strain temp v_p2 v_p3 v_p4 ke pe press  # step, strain, temperature, stresses, kinetic/potential energy, and pressure
+run             300000  # 300000 steps x 0.001 ps = 300 ps; target engineering strain is about 0.30.
+# ---------------- End of simulation
+print "All done"  # indicate completion
